@@ -5,13 +5,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Inky.Gamey.Models;
+using Inky.Gamey.Data;
 
 namespace Inky.Gamey.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+
         public IActionResult Index()
         {
+            //var x = _context.Games.ToArray();
+
             return View();
         }
 
