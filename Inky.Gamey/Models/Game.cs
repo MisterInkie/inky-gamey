@@ -16,5 +16,8 @@ namespace Inky.Gamey.Models
         public string Title { get; set; }
 
         public List<Session> Sessions { get; set; }
+
+        public string CreatedBy { get; set; }
+        public ApplicationUser CreatedByUser { get; set; }
     }
 }

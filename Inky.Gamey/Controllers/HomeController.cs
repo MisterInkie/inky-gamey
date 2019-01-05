@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,22 +7,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Inky.Gamey.Models;
 using Inky.Gamey.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Inky.Gamey.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //var x = _context.Games.ToArray();
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+
+                var sessions = await _context.Sessions
+                    .Include(s => s.Game)
+                    .Where(s => s.Game.CreatedBy == user.Id)
+                    .OrderByDescending(s => s.Time)
+                    .Take(3)
+                    .ToListAsync();
+
+                ViewData["Sessions"] = sessions;
+            }
 
             return View();
         }

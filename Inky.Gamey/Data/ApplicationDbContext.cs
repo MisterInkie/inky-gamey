@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inky.Gamey.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Game> Games { get; set; }
         public DbSet<Session> Sessions { get; set; }
@@ -23,6 +23,7 @@ namespace Inky.Gamey.Data
 
             builder.Entity<Game>().ToTable("Game");
             builder.Entity<Game>().HasMany(x => x.Sessions).WithOne(x => x.Game);
+            builder.Entity<Game>().HasOne(x => x.CreatedByUser).WithMany(x => x.Games).HasForeignKey(x => x.CreatedBy);
 
             builder.Entity<Session>().ToTable("Session");
         }

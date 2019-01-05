@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Inky.Gamey.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Inky.Gamey.Models;
 
 namespace Inky.Gamey
 {
@@ -38,8 +39,13 @@ namespace Inky.Gamey
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"))            
             );
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI();
+
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

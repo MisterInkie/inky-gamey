@@ -3,5 +3,54 @@
 }
 
 <div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        var recentSessions = (IEnumerable<Session>)ViewData["Sessions"];
+        if (recentSessions == null || !recentSessions.Any())
+        {
+            <div style="text-align:center">
+                Play some games!
+            </div>
+        }
+        else
+        {
+            <div>
+                <h2>
+                    Recently played
+                </h2>
 
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Time
+                            </th>
+                            <th>
+                                Game
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in recentSessions)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Time)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Game.Title)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+    else
+    {
+        <div style="text-align:center">
+            Login or create an account!
+        </div>
+    }
 </div>
