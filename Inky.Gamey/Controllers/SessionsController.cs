@@ -31,7 +31,7 @@ namespace Inky.Gamey.Controllers
 
             var sessions = await _context.Sessions
                 .Include(x => x.Game)
-                .Where(s => s.Game.CreatedBy == user.Id)
+                .Where(s => s.CreatedBy == user.Id)
                 .OrderByDescending(x => x.Time)
                 .ToListAsync();
 
@@ -46,8 +46,7 @@ namespace Inky.Gamey.Controllers
                 return NotFound();
             }
 
-            var session = await _context.Sessions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var session = await _context.Sessions.FirstOrDefaultAsync(m => m.Id == id);
 
             if (session == null)
             {
@@ -60,9 +59,7 @@ namespace Inky.Gamey.Controllers
         // GET: Sessions/Create
         public async Task<IActionResult> Create()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-
-            ViewData["Games"] = await _context.Games.Where(g => g.CreatedBy == user.Id).ToArrayAsync();
+            ViewData["Games"] = await _context.Games.ToArrayAsync();
 
             return View();
         }
@@ -78,12 +75,14 @@ namespace Inky.Gamey.Controllers
 
             if (ModelState.IsValid)
             {
+                session.CreatedBy = user.Id;
+
                 _context.Add(session);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Games"] = await _context.Games.Where(g => g.CreatedBy == user.Id).ToArrayAsync();
+            ViewData["Games"] = await _context.Games.ToArrayAsync();
 
             return View(session);
         }
@@ -105,7 +104,7 @@ namespace Inky.Gamey.Controllers
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            ViewData["Games"] = await _context.Games.Where(g => g.CreatedBy == user.Id).ToArrayAsync();
+            ViewData["Games"] = await _context.Games.ToArrayAsync();
 
             return View(session);
         }
@@ -146,7 +145,7 @@ namespace Inky.Gamey.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Games"] = await _context.Games.Where(g => g.CreatedBy == user.Id).ToArrayAsync();
+            ViewData["Games"] = await _context.Games.ToArrayAsync();
 
             return View(session);
         }

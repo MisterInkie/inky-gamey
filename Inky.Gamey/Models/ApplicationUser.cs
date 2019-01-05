@@ -12,14 +12,17 @@ namespace Inky.Gamey.Models
             : base(userName)
         {
             Games = new List<Game>();
+            Sessions = new List<Session>();
         }
 
         public ApplicationUser()
             : base()
         {
             Games = new List<Game>();
+            Sessions = new List<Session>();
         }
 
         public List<Game> Games { get; set; }
+        public List<Session> Sessions { get; set; }
     }
 }

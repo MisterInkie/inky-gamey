@@ -11,7 +11,11 @@ namespace Inky.Gamey.Models
         public Game Game { get; set; }
         public int GameId { get; set; }
 
+
         public DateTime Time { get; set; }
         public string Notes { get; set; }
+
+        public string CreatedBy { get; set; }
+        public ApplicationUser CreatedByUser { get; set; }
     }
 }

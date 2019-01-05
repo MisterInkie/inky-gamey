@@ -26,6 +26,7 @@ namespace Inky.Gamey.Data
             builder.Entity<Game>().HasOne(x => x.CreatedByUser).WithMany(x => x.Games).HasForeignKey(x => x.CreatedBy);
 
             builder.Entity<Session>().ToTable("Session");
+            builder.Entity<Session>().HasOne(x => x.CreatedByUser).WithMany(x => x.Sessions).HasForeignKey(x => x.CreatedBy);
         }
     }
 }

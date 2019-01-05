@@ -25,14 +25,20 @@ namespace Inky.Gamey.Controllers
             _userManager = userManager;
         }
 
+
         // GET: Games
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var games = await _context.Games.Where(g => g.CreatedBy == user.Id).ToListAsync();
+            // Get all games this user has created
+            var games = await _context.Games.ToListAsync();
 
+            // Pass current application user to view template
+            ViewData["ApplicationUser"] = await _userManager.GetUserAsync(HttpContext.User);
+
+            // Pass games to view template
             return View(games);
         }
+
 
         // GET: Games/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -108,9 +114,18 @@ namespace Inky.Gamey.Controllers
 
             if (ModelState.IsValid)
             {
+                // Check some asshole isn't trying to update someone elses game record
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if(game.CreatedBy != user.Id)
+                {
+                    return Unauthorized();
+                }
+
+
                 try
                 {
                     _context.Update(game);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -124,10 +139,12 @@ namespace Inky.Gamey.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(game);
         }
+
 
         // GET: Games/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -137,8 +154,7 @@ namespace Inky.Gamey.Controllers
                 return NotFound();
             }
 
-            var game = await _context.Games
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var game = await _context.Games.FirstOrDefaultAsync(m => m.Id == id);
             if (game == null)
             {
                 return NotFound();
@@ -146,6 +162,7 @@ namespace Inky.Gamey.Controllers
 
             return View(game);
         }
+
 
         // POST: Games/Delete/5
         [HttpPost, ActionName("Delete")]

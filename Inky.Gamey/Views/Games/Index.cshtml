@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Games";
+
+    var usr = (ApplicationUser)ViewData["ApplicationUser"];
 }
 
 <h2>Games</h2>
@@ -25,9 +27,15 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*If current user created this game, allow them to edit it *@
+                @if(item.CreatedBy == usr.Id)
+                {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </div>
+                }
             </td>
         </tr>
 }

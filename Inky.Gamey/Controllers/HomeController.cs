@@ -18,20 +18,30 @@ namespace Inky.Gamey.Controllers
 
         public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            // ApplicationDbContext is our 'connection' to the database
             _context = context;
+
+            // We use UserManager to get info on the current user
             _userManager = userManager;
         }
 
 
+        /// <summary>
+        /// Index page
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
+            // If we're logged in, grab any recent game sessions for this user
             if (User.Identity.IsAuthenticated)
             {
+                // Get current user
                 var user = await _userManager.GetUserAsync(HttpContext.User);
 
+                // Get all sessions for games created by this user
                 var sessions = await _context.Sessions
                     .Include(s => s.Game)
-                    .Where(s => s.Game.CreatedBy == user.Id)
+                    .Where(s => s.CreatedBy == user.Id)
                     .OrderByDescending(s => s.Time)
                     .Take(3)
                     .ToListAsync();
@@ -42,6 +52,7 @@ namespace Inky.Gamey.Controllers
             return View();
         }
 
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -49,17 +60,7 @@ namespace Inky.Gamey.Controllers
             return View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
