@@ -22,11 +22,11 @@ namespace Inky.Gamey.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Game>().ToTable("Game");
-            builder.Entity<Game>().HasMany(x => x.Sessions).WithOne(x => x.Game);
-            builder.Entity<Game>().HasOne(x => x.CreatedByUser).WithMany(x => x.Games).HasForeignKey(x => x.CreatedBy);
+            builder.Entity<Game>().HasMany(game => game.Sessions).WithOne(session => session.Game);
+            builder.Entity<Game>().HasOne(game => game.CreatedByUser).WithMany(user => user.Games).HasForeignKey(game => game.CreatedBy);
 
             builder.Entity<Session>().ToTable("Session");
-            builder.Entity<Session>().HasOne(x => x.CreatedByUser).WithMany(x => x.Sessions).HasForeignKey(x => x.CreatedBy);
+            builder.Entity<Session>().HasOne(session => session.CreatedByUser).WithMany(user => user.Sessions).HasForeignKey(session => session.CreatedBy);
         }
     }
 }

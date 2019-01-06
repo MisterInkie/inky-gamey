@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Inky.Gamey.Models
+namespace Inky.Gamey.Data
 {
     public class Game
     {

@@ -1,4 +1,4 @@
-﻿@model Inky.Gamey.Models.Session
+﻿@model Inky.Gamey.Data.Session
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,6 +14,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
+                <label class="control-label">Game</label>
+                <select asp-for="GameId" class="form-control" asp-items="@(new SelectList((Game[])ViewData["Games"], "Id", "Title"))">
+                    <option></option>
+                </select>
+                <span asp-validation-for="GameId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
                 <input asp-for="Time" class="form-control" />
                 <span asp-validation-for="Time" class="text-danger"></span>
@@ -22,13 +29,6 @@
                 <label asp-for="Notes" class="control-label"></label>
                 <input asp-for="Notes" class="form-control" />
                 <span asp-validation-for="Notes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Game</label>
-                <select asp-for="GameId" class="form-control" asp-items="@(new SelectList((Game[])ViewData["Games"], "Id", "Title"))">
-                    <option></option>
-                </select>
-                <span asp-validation-for="GameId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
